@@ -389,7 +389,10 @@ class PatchFile(ModFile):
             # Make sure that once we merge a record type, all later plugin
             # loads will load that record type too so that we can update the
             # merged records according to load order
-            for s in block.get_all_signatures():
+            unique_signatures = set()
+            for r in block.iter_records():
+                unique_signatures.add(r._rec_sig)
+            for s in unique_signatures:
                 if s not in self.loadFactory.sig_to_type:
                     self.readFactory.add_class(s)
                     self.loadFactory.add_class(s)
